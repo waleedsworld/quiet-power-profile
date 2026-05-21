@@ -441,4 +441,170 @@
   section[id] {
     scroll-margin-top: 5rem;
   }
+
+  /* Custom scrollbar — subtle, on-brand */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(0 0% 8%);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--electric-blue) / 0.25);
+    border-radius: 999px;
+    border: 2px solid hsl(0 0% 8%);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--electric-blue) / 0.5);
+  }
+  * {
+    scrollbar-color: hsl(var(--electric-blue) / 0.3) hsl(0 0% 8%);
+  }
+
+  /* Consistent, visible focus ring for keyboard users. Uses :focus-visible so
+     mouse clicks stay clean while keyboard navigation always gets a
+     high-contrast electric-blue ring. */
+  :where(a, button, [role="button"], [tabindex], input, textarea, select):focus-visible {
+    outline: 2px solid hsl(var(--electric-blue));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Snappier text selection */
+  ::selection {
+    background: hsl(var(--electric-blue) / 0.3);
+    color: hsl(var(--primary-text));
+  }
+
+  /* Robustness: never allow a stray wide element to scroll the whole page
+     sideways on small screens. Individual scroll regions can still opt in. */
+  html,
+  body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Give every interactive control a comfortable tap target on touch devices
+     without changing its look on pointer/desktop. */
+  @media (hover: none) and (pointer: coarse) {
+    a,
+    button,
+    [role="button"] {
+      touch-action: manipulation;
+    }
+  }
+
+  /* Skip-to-content link — visually hidden until focused */
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    padding: 0.625rem 1rem;
+    border-radius: 0.5rem;
+    background: hsl(var(--electric-blue));
+    color: hsl(var(--primary-text));
+    font-weight: 600;
+    font-size: 0.875rem;
+    transform: translateY(-150%);
+    transition: transform 0.2s ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+/* UI-design polish layer */
+@layer utilities {
+  /* Shimmer placeholder for loading media */
+  .shimmer-skeleton {
+    background:
+      linear-gradient(
+        100deg,
+        hsl(0 0% 12%) 30%,
+        hsl(var(--electric-blue) / 0.08) 50%,
+        hsl(0 0% 12%) 70%
+      );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Electric-blue gradient text for accents */
+  .text-gradient-blue {
+    background: linear-gradient(
+      120deg,
+      hsl(var(--electric-blue)) 0%,
+      hsl(217 91% 78%) 45%,
+      hsl(var(--electric-blue)) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Sweeping shine that runs across an element on hover */
+  .hover-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .hover-shine::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      hsl(0 0% 100% / 0.08),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .hover-shine:hover::after {
+    left: 125%;
+  }
+
+}
+
+/* Respect users who prefer reduced motion: neutralise decorative animations,
+   transforms, and smooth scrolling site-wide (WCAG 2.3.3) — killing the
+   ambient float/pulse loops and long transitions for motion-sensitive users. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-fade-in-up,
+  .animate-pulse {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
