@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
+import { Reveal } from "@/components/Reveal";
+import { useOverlay } from "@/hooks/use-overlay";
 
 export const JourneySection = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
@@ -35,16 +38,22 @@ export const JourneySection = () => {
     }
   };
 
+  // Scroll lock + Escape-to-close + arrow-key navigation + focus trap for the lightbox.
+  const dialogRef = useOverlay(isLightboxOpen, closeLightbox, {
+    onNext: nextImage,
+    onPrev: previousImage,
+  });
+
   return (
     <section id="journey" className="py-32 bg-background relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute top-20 left-20 w-px h-40 bg-electric-blue/10"></div>
-      <div className="absolute bottom-20 right-20 w-px h-60 bg-electric-blue/5"></div>
-      
+      <div className="absolute top-20 left-20 w-px h-40 bg-electric-blue/10" aria-hidden="true"></div>
+      <div className="absolute bottom-20 right-20 w-px h-60 bg-electric-blue/5" aria-hidden="true"></div>
+
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-16 items-start">
           {/* Left Column - Bold Narrative */}
-          <div className="lg:col-span-5 space-y-8">
+          <Reveal from="right" className="lg:col-span-5 space-y-8">
             <div className="space-y-6">
               <h2 className="section-headline-editorial">
                 THE
@@ -77,28 +86,35 @@ export const JourneySection = () => {
                 </p>
               </div>
             </div>
-          </div>
-          
+          </Reveal>
+
           {/* Right Column - Dynamic Photo Gallery */}
           <div className="lg:col-span-7">
             <div className="columns-2 md:columns-3 gap-4 space-y-4">
               {placeholderImages.map((image, index) => (
-                <div
+                <button
                   key={image.id}
-                  className="break-inside-avoid mb-4 cursor-pointer group"
+                  type="button"
+                  className="break-inside-avoid mb-4 cursor-pointer group block w-full text-left"
                   onClick={() => openLightbox(index)}
+                  aria-label={`Open ${image.alt} in lightbox`}
                 >
-                  <div className="relative overflow-hidden rounded-lg bg-card border border-card/50 transition-all duration-300 hover:border-electric-blue/30 hover:shadow-glow">
-                    <img
+                  <div className="relative overflow-hidden rounded-lg bg-card border border-card/50 transition-all duration-300 hover:border-electric-blue/30 hover:shadow-glow hover:-translate-y-0.5">
+                    <ImageWithSkeleton
                       src={`https://picsum.photos/400/${image.height}?random=${image.id}&grayscale`}
                       alt={image.alt}
+                      wrapperClassName="w-full"
+                      width={400}
+                      height={image.height}
                       className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
+                      decoding="async"
+                      style={{ aspectRatio: `400 / ${image.height}` }}
                     />
-                    <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-colors duration-300"></div>
-                    <div className="absolute bottom-2 right-2 w-2 h-2 bg-electric-blue/0 group-hover:bg-electric-blue rounded-full transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-colors duration-300" aria-hidden="true"></div>
+                    <div className="absolute bottom-2 right-2 w-2 h-2 bg-electric-blue/0 group-hover:bg-electric-blue rounded-full transition-colors duration-300" aria-hidden="true"></div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -107,39 +123,57 @@ export const JourneySection = () => {
 
       {/* Lightbox Modal */}
       {isLightboxOpen && selectedImage !== null && (
-        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Gallery image ${selectedImage + 1} of ${placeholderImages.length}`}
+          className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+          }}
+        >
+          {/* Close Button — always on-screen, generous tap target */}
+          <button
+            type="button"
+            onClick={closeLightbox}
+            aria-label="Close image viewer"
+            className="fixed top-4 right-4 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-card/80 text-primary-text hover:text-electric-blue hover:bg-card transition-colors"
+          >
+            <X className="w-6 h-6" aria-hidden="true" />
+          </button>
+
           <div className="relative max-w-4xl max-h-[90vh] w-full">
-            {/* Close Button */}
-            <button
-              onClick={closeLightbox}
-              className="absolute -top-12 right-0 text-primary-text hover:text-electric-blue transition-colors z-10"
-            >
-              <X className="w-8 h-8" />
-            </button>
-            
             {/* Navigation */}
             <button
+              type="button"
               onClick={previousImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-text hover:text-electric-blue transition-colors z-10 text-2xl"
+              aria-label="Previous image"
+              className="absolute left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-card/80 text-primary-text hover:text-electric-blue hover:bg-card transition-colors"
             >
-              ←
+              <ChevronLeft className="w-6 h-6" aria-hidden="true" />
             </button>
             <button
+              type="button"
               onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-text hover:text-electric-blue transition-colors z-10 text-2xl"
+              aria-label="Next image"
+              className="absolute right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-card/80 text-primary-text hover:text-electric-blue hover:bg-card transition-colors"
             >
-              →
+              <ChevronRight className="w-6 h-6" aria-hidden="true" />
             </button>
-            
+
             {/* Main Image */}
             <img
               src={`https://picsum.photos/800/600?random=${placeholderImages[selectedImage].id}&grayscale`}
               alt={placeholderImages[selectedImage].alt}
+              width={800}
+              height={600}
+              decoding="async"
               className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
             />
-            
+
             {/* Image Counter */}
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-secondary-text text-sm">
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-secondary-text text-sm" aria-live="polite">
               {selectedImage + 1} / {placeholderImages.length}
             </div>
           </div>

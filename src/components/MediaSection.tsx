@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Play, X } from "lucide-react";
+import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
+import { Reveal } from "@/components/Reveal";
+import { useOverlay } from "@/hooks/use-overlay";
 
 export const MediaSection = () => {
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
@@ -74,12 +77,15 @@ export const MediaSection = () => {
     setSelectedVideo(null);
   };
 
+  // Scroll lock + Escape-to-close + focus trap for the video modal.
+  const dialogRef = useOverlay(isModalOpen, closeModal);
+
   return (
     <section id="media" className="py-32 bg-card/20 relative">
       {/* Accent Lines */}
-      <div className="absolute top-0 left-1/4 w-px h-24 bg-electric-blue/20"></div>
-      <div className="absolute bottom-0 right-1/3 w-px h-32 bg-electric-blue/10"></div>
-      
+      <div className="absolute top-0 left-1/4 w-px h-24 bg-electric-blue/20" aria-hidden="true"></div>
+      <div className="absolute bottom-0 right-1/3 w-px h-32 bg-electric-blue/10" aria-hidden="true"></div>
+
       <div className="container mx-auto px-6 lg:px-12">
         <div className="space-y-16">
           {/* Editorial Header */}
@@ -97,35 +103,44 @@ export const MediaSection = () => {
           {/* Video Grid */}
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
             {videos.map((video, index) => (
-              <div
+              <Reveal
                 key={video.id}
-                className="group cursor-pointer"
+                as="button"
+                type="button"
+                delay={index * 80}
+                className="group cursor-pointer text-left w-full"
                 onClick={() => openModal(index)}
+                aria-label={`Play ${video.title}, ${video.event}, ${video.duration}`}
               >
                 <div className="relative aspect-video bg-card rounded-xl overflow-hidden border border-card/50 transition-all duration-300 hover:border-electric-blue/30 hover:shadow-glow hover:-translate-y-1">
                   {/* Thumbnail */}
-                  <img
+                  <ImageWithSkeleton
                     src={video.thumbnail}
-                    alt={video.title}
+                    alt=""
+                    wrapperClassName="w-full h-full"
+                    width={800}
+                    height={450}
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
-                  
+
                   {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-background/40 group-hover:bg-background/20 transition-colors duration-300"></div>
-                  
+                  <div className="absolute inset-0 bg-background/40 group-hover:bg-background/20 transition-colors duration-300" aria-hidden="true"></div>
+
                   {/* Play Button */}
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
                     <div className="w-16 h-16 bg-electric-blue/90 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-electric-blue group-hover:scale-110">
                       <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
                     </div>
                   </div>
-                  
+
                   {/* Duration Badge */}
                   <div className="absolute bottom-3 right-3 bg-background/80 backdrop-blur-sm text-primary-text text-xs px-2 py-1 rounded">
                     {video.duration}
                   </div>
                 </div>
-                
+
                 {/* Video Info */}
                 <div className="mt-4 space-y-2">
                   <h3 className="font-semibold text-primary-text leading-tight group-hover:text-electric-blue transition-colors">
@@ -135,7 +150,7 @@ export const MediaSection = () => {
                     {video.event}
                   </p>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -143,16 +158,27 @@ export const MediaSection = () => {
 
       {/* Video Modal */}
       {isModalOpen && selectedVideo !== null && (
-        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={videos[selectedVideo].title}
+          className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeModal();
+          }}
+        >
+          {/* Close Button — always on-screen, generous tap target */}
+          <button
+            type="button"
+            onClick={closeModal}
+            aria-label="Close video"
+            className="fixed top-4 right-4 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-card/80 text-primary-text hover:text-electric-blue hover:bg-card transition-colors"
+          >
+            <X className="w-6 h-6" aria-hidden="true" />
+          </button>
+
           <div className="relative max-w-6xl w-full">
-            {/* Close Button */}
-            <button
-              onClick={closeModal}
-              className="absolute -top-12 right-0 text-primary-text hover:text-electric-blue transition-colors z-10"
-            >
-              <X className="w-8 h-8" />
-            </button>
-            
             {/* Video Container */}
             <div className="aspect-video bg-card rounded-xl overflow-hidden">
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-card to-card/50">
