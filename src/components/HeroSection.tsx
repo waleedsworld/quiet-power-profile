@@ -1,16 +1,18 @@
 import { Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { profile } from "@/config/profile";
+import { smoothScrollTo } from "@/lib/a11y";
 
-const scrollTo = (id: string) => {
-  document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
-};
+const scrollTo = smoothScrollTo;
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-background">
+    <section
+      aria-label="Introduction"
+      className="relative min-h-screen flex items-center overflow-hidden bg-background"
+    >
       {/* Portrait panel — abstract gradient + monogram (no third-party photo) */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" aria-hidden="true">
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/20 z-10"></div>
         <div className="absolute right-0 top-0 w-full lg:w-1/2 h-full opacity-40 lg:opacity-100">
           <div className="relative w-full h-full bg-gradient-to-br from-electric-blue/30 via-background to-background flex items-center justify-center">
@@ -24,7 +26,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Subtle Grid Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5" aria-hidden="true">
         <div
           className="w-full h-full"
           style={{
@@ -39,7 +41,10 @@ export const HeroSection = () => {
           <div className="lg:col-span-7 space-y-10 lg:space-y-12 animate-fade-in-up">
             {/* Status Badge */}
             <div className="inline-flex items-center space-x-2 px-3 py-1.5 bg-electric-blue/5 rounded-full border border-electric-blue/10">
-              <div className="w-1.5 h-1.5 bg-electric-blue rounded-full animate-pulse"></div>
+              <div
+                className="w-1.5 h-1.5 bg-electric-blue rounded-full animate-pulse"
+                aria-hidden="true"
+              ></div>
               <span className="text-electric-blue text-xs font-medium tracking-wide uppercase">
                 {profile.availability}
               </span>
@@ -50,7 +55,7 @@ export const HeroSection = () => {
               <h1 className="mega-headline">
                 {profile.headline[0]}
                 <span className="block">{profile.headline[1]}</span>
-                <span className="block text-electric-blue">{profile.headline[2]}</span>
+                <span className="block text-gradient-blue">{profile.headline[2]}</span>
               </h1>
 
               <p className="hero-subtitle mt-8 max-w-lg">{profile.subtitle}</p>
@@ -59,12 +64,15 @@ export const HeroSection = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
-                className="btn-primary-modern group"
+                className="btn-primary-modern hover-shine group"
                 onClick={() => scrollTo("#contact")}
               >
-                <Calendar className="w-4 h-4 mr-2" />
+                <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />
                 Book a Strategy Call
-                <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                <ArrowRight
+                  className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </Button>
 
               <Button
@@ -79,7 +87,10 @@ export const HeroSection = () => {
             {/* Achievement Stats */}
             <div className="flex flex-wrap gap-x-10 gap-y-6 pt-8">
               {profile.heroStats.map((stat) => (
-                <div key={stat.label} className="text-left">
+                <div
+                  key={stat.label}
+                  className="text-left pl-4 border-l-2 border-electric-blue/30 transition-colors hover:border-electric-blue"
+                >
                   <div className="text-3xl font-bold text-primary-text">{stat.value}</div>
                   <div className="text-sm text-secondary-text font-medium tracking-wide">
                     {stat.label}
@@ -90,7 +101,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Right Column - accent flourishes */}
-          <div className="hidden lg:block lg:col-span-5 relative">
+          <div className="hidden lg:block lg:col-span-5 relative" aria-hidden="true">
             <div className="absolute top-1/4 -right-4 w-2 h-16 bg-electric-blue/20 rounded-full animate-float opacity-60"></div>
             <div
               className="absolute bottom-1/3 -right-8 w-1 h-24 bg-electric-blue/10 rounded-full animate-float"
@@ -107,7 +118,7 @@ export const HeroSection = () => {
         aria-label="Scroll to explore"
       >
         <div className="text-xs font-medium tracking-wider uppercase">Scroll to explore</div>
-        <div className="w-8 h-px bg-electric-blue/40"></div>
+        <div className="w-8 h-px bg-electric-blue/40" aria-hidden="true"></div>
       </button>
     </section>
   );

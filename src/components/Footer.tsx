@@ -15,7 +15,7 @@ export const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer id="contact" className="py-16 bg-card/30 border-t border-electric-blue/20">
+    <footer className="py-16 bg-card/30 border-t border-electric-blue/20">
       <div className="container mx-auto px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="grid lg:grid-cols-4 gap-12 mb-12">

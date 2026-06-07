@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { Reveal } from "@/components/Reveal";
 
 export const PortfolioSection = () => {
   const companies = [
@@ -97,12 +98,12 @@ export const PortfolioSection = () => {
           {/* Companies Grid */}
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
             {companies.map((company, index) => (
-              <div
+              <Reveal
                 key={company.id}
+                delay={index * 90}
                 className="group relative"
-                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="portfolio-card h-full">
+                <div className="portfolio-card hover-shine h-full">
                   {/* Company Logo */}
                   <div className="flex items-start justify-between mb-6">
                     <div className="w-12 h-12 bg-electric-blue/10 rounded-lg flex items-center justify-center">
@@ -134,7 +135,7 @@ export const PortfolioSection = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 

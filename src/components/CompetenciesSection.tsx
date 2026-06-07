@@ -1,4 +1,5 @@
 import { Brain, Rocket, Globe, Target, Code, Users2 } from "lucide-react";
+import { Reveal } from "@/components/Reveal";
 
 const competencies = [
   {
@@ -62,10 +63,10 @@ export const CompetenciesSection = () => {
         {/* Competencies Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {competencies.map((competency, index) => (
-            <div
+            <Reveal
               key={competency.title}
-              className="group p-8 bg-gradient-dark-surface rounded-xl border border-card-hover/20 hover:border-electric-blue/40 transition-all duration-300 hover:transform hover:-translate-y-2"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              delay={index * 80}
+              className="group relative overflow-hidden p-8 bg-gradient-dark-surface rounded-xl border border-card-hover/20 hover:border-electric-blue/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-12px_hsl(var(--electric-blue)/0.2)]"
             >
               {/* Icon */}
               <div className="mb-6">
@@ -85,29 +86,29 @@ export const CompetenciesSection = () => {
               </div>
 
               {/* Hover Effect */}
-              <div className="absolute inset-0 bg-electric-blue/0 group-hover:bg-electric-blue/5 rounded-xl transition-colors duration-300"></div>
-            </div>
+              <div className="absolute inset-0 bg-electric-blue/0 group-hover:bg-electric-blue/5 rounded-xl transition-colors duration-300 pointer-events-none"></div>
+            </Reveal>
           ))}
         </div>
 
         {/* Stats Section */}
         <div className="mt-20 grid md:grid-cols-4 gap-8">
-          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20">
+          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20 transition-all duration-300 hover:-translate-y-1 hover:border-electric-blue/40">
             <div className="text-3xl font-bold text-electric-blue mb-2">15+</div>
             <div className="text-sm text-secondary-text">Years Leading</div>
           </div>
           
-          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20">
+          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20 transition-all duration-300 hover:-translate-y-1 hover:border-electric-blue/40">
             <div className="text-3xl font-bold text-emerald-400 mb-2">50+</div>
             <div className="text-sm text-secondary-text">Companies Built</div>
           </div>
           
-          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20">
+          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20 transition-all duration-300 hover:-translate-y-1 hover:border-electric-blue/40">
             <div className="text-3xl font-bold text-purple-400 mb-2">$500M+</div>
             <div className="text-sm text-secondary-text">Capital Raised</div>
           </div>
           
-          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20">
+          <div className="text-center p-6 bg-gradient-dark-surface rounded-xl border border-card-hover/20 transition-all duration-300 hover:-translate-y-1 hover:border-electric-blue/40">
             <div className="text-3xl font-bold text-orange-400 mb-2">100K+</div>
             <div className="text-sm text-secondary-text">Lives Impacted</div>
           </div>
