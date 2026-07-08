@@ -3,34 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Speed up webfont delivery by warming the font-host connections early -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <title>Adrian Cole — CEO & Tech Visionary | Building the Future of Tech</title>
     <meta name="description" content="Personal-brand landing page for a founder and executive: journey, keynote media, portfolio, and core competencies. Built with React, Vite, TypeScript and Tailwind." />
     <meta name="author" content="Adrian Cole" />
     <meta name="keywords" content="CEO, tech founder, venture capital, AI, startup scaling, strategic consulting, tech leadership, personal brand" />
+    <link rel="canonical" href="https://basil.ceo/" />
+
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Quiet Power Profile" />
+    <meta property="og:url" content="https://basil.ceo/" />
     <meta property="og:title" content="Adrian Cole — CEO & Tech Visionary" />
     <meta property="og:description" content="Founder and executive scaling global tech ventures. Journey, media, portfolio and competencies in one cinematic page." />
+    <meta property="og:image" content="https://basil.ceo/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Adrian Cole — Building the Future of Tech" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Adrian Cole — CEO & Tech Visionary" />
     <meta name="twitter:description" content="Founder and executive scaling global tech ventures." />
+    <meta name="twitter:image" content="https://basil.ceo/og-image.png" />
+    <meta name="twitter:image:alt" content="Adrian Cole — Building the Future of Tech" />
 
     <!-- SEO -->
     <meta name="theme-color" content="#0057FF" />
     <meta name="robots" content="index, follow" />
+    <meta name="color-scheme" content="dark" />
 
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Adrian Cole",
-      "jobTitle": "CEO & Founder",
-      "description": "Tech visionary and CEO with expertise in scaling global ventures and AI innovation",
-      "knowsAbout": ["Venture Capital", "Artificial Intelligence", "Startup Scaling", "Product Strategy", "Global Business"]
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://basil.ceo/#website",
+          "url": "https://basil.ceo/",
+          "name": "Quiet Power Profile",
+          "description": "A cinematic, dark-mode personal-brand landing page for founders and executives.",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://basil.ceo/#person",
+          "name": "Adrian Cole",
+          "jobTitle": "CEO & Founder",
+          "url": "https://basil.ceo/",
+          "image": "https://basil.ceo/og-image.png",
+          "description": "Tech visionary and CEO with expertise in scaling global ventures and AI innovation",
+          "knowsAbout": ["Venture Capital", "Artificial Intelligence", "Startup Scaling", "Product Strategy", "Global Business"],
+          "mainEntityOfPage": { "@id": "https://basil.ceo/#website" }
+        }
+      ]
     }
     </script>
   </head>
