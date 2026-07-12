@@ -25,3 +25,9 @@ dist-ssr
 
 # agent working files
 .agent-tmp
+
+# test output
+coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
